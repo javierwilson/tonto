@@ -30,7 +30,7 @@ You can configure all options in tonto.sh itself, but you better do it in
 tonto.config.sh, you basically need to set the array HOSTS with the lists of hosts
 you want to monitor, and the EMAIL address you want to get the alerts.
 
-HOSTS=( server1 server2 example.com example.org )
-EMAIL=bob@example.com
+> HOSTS=( server1 server2 example.com example.org )
+> EMAIL=bob@example.com
 
 Other options available include ping deadline, ping packet count, etc.
