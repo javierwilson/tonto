@@ -31,7 +31,7 @@ touch -d "$(date -d '5 minutes ago')" $LOG/5MINUTES
 if [ $LOG/LASTTIME -ot $LOG/5MINUTES ]; then
 	touch $LOG/LASTTIME
 	graph=1
-	HTML="<p>Last updated `date`</p>\n"
+	HTML="<small>Last updated `date`</small>"
 fi
 
 # use ping?!
