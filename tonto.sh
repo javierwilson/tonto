@@ -27,8 +27,6 @@ fi
 graph=0
 touch -d "$(date -d '5 minutes ago')" $LOG/5MINUTES
 if [ $LOG/LASTTIME -ot $LOG/5MINUTES ]; then
-	logger "yay! 5 minutes"
-	echo "yay! 5 minutes"
 	touch $LOG/LASTTIME
 	graph=1
 fi
@@ -57,7 +55,7 @@ for ip in "${HOSTS[@]}"; do
 	date=`date +%Y%m%d%H%M%S`
 	rtt=`$PING -c $PING_COUNT -w $PING_DEADLINE $ip | tail -1| awk -F '/' '{print $5}'`
 	rc=$?
-	echo "$ip RC = $rc RT = $rtt"
+	#echo "$ip RC = $rc RT = $rtt"
 	if [ $rc = 0 ]; then
 		rc_str="OK"
 		if [ -f $LOG/$ip.down ]; then
