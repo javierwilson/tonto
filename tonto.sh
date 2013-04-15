@@ -6,6 +6,8 @@
 
 LOG=/var/log/tonto
 WWW=/var/www/html/tonto
+HEADER=`dirname $0`/header.html
+FOOTER=`dirname $0`/footer.html
 HOSTS=( server1 server2 printer1 printer2 example.com example.org )
 EMAIL="root@example.com"
 PING=""
@@ -29,6 +31,7 @@ touch -d "$(date -d '5 minutes ago')" $LOG/5MINUTES
 if [ $LOG/LASTTIME -ot $LOG/5MINUTES ]; then
 	touch $LOG/LASTTIME
 	graph=1
+	HTML="<p>Last updated `date`</p>\n"
 fi
 
 # use ping?!
@@ -97,6 +100,7 @@ for ip in "${HOSTS[@]}"; do
 		COMMENT:"pkt loss\:" \
 		AREA:PLNone#FFFFFF:"0%":STACK AREA:PL10#FFFF00:"1-10%":STACK AREA:PL25#FFCC00:"10-25%":STACK\
 		AREA:PL50#FF8000:"25-50%":STACK AREA:PL100#FF0000:"50-100%":STACK
+		HTML="${HTML}<h2>$ip</h2><img src=\"$ip.png\"/><hr>"
 	fi
 
 	# log
@@ -104,3 +108,7 @@ for ip in "${HOSTS[@]}"; do
 	logger "$date $ip $rc_str $rtt"
 
 done
+if [ $graph == 1 ]; then
+	echo $HTML > $LOG/tonto.html
+	cat $HEADER $LOG/tonto.html $FOOTER > $WWW/index.html
+fi
