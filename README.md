@@ -1,7 +1,8 @@
 tonto, silly IP monitoring
 ==========================
 
-The basic idea of tonto is you write a list of IP numbers, and tonto does the rest.
+The basic idea of tonto is: you write the list of IP numbers you want to monitor,
+and tonto does the rest.
 
 What does tonto do?
 -------------------
@@ -9,11 +10,10 @@ What does tonto do?
 Tonto gets a list of hosts (HOSTS variable) and pings each of them, if a host does
 not respond it will send and alert (to EMAIL variable), it will also notify when the
 host is responsive again.  It will also keep a log file with this information and
-response times (RRT) from ping.
+response times (RTT) from ping.
 
-Addionally, if RRDTOOL is available, it will save all this information (RRT and
-packet loss, evetually) in an RRD database file, and create a pretty graph every 5
-minutes.
+Addionally, if RRDTOOL is available, it will save all this information (RTT and
+packet loss) in an RRD database file, and create a pretty graph every 5 minutes.
 
 How do I install tonto?
 -----------------------

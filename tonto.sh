@@ -56,9 +56,12 @@ for ip in "${HOSTS[@]}"; do
 	fi
 
 	date=`date +%Y%m%d%H%M%S`
-	rtt=`$PING -c $PING_COUNT -w $PING_DEADLINE $ip | tail -1| awk -F '/' '{print $5}'`
+	#rtt=`$PING -c $PING_COUNT -w $PING_DEADLINE $ip | tail -1| awk -F '/' '{print $5}'`
+	lines=`$PING -c $PING_COUNT -w $PING_DEADLINE $ip|grep -E 'packet loss|rtt'`
 	rc=$?
-	#echo "$ip RC = $rc RT = $rtt"
+	rtt=`echo $lines|cut -f 5 -d '/'`
+	loss=`echo $lines|cut -f 6 -d ' '|tr -d '%'`
+	#echo "$ip RC = $rc RT = $rtt PL = $loss"
 	if [ $rc = 0 ]; then
 		rc_str="OK"
 		if [ -f $LOG/$ip.down ]; then
@@ -77,7 +80,7 @@ for ip in "${HOSTS[@]}"; do
 
 	# update RRD file
 	if [ -f $LOG/$ip.rrd ] && [ -n $RRDTOOL ]; then
-		$RRDTOOL update $LOG/$ip.rrd --template loss:rtt N:0:$rtt
+		$RRDTOOL update $LOG/$ip.rrd --template loss:rtt N:$loss:$rtt
 	fi
 
 	if [ $graph == 1 ]; then
@@ -104,8 +107,8 @@ for ip in "${HOSTS[@]}"; do
 	fi
 
 	# log
-	echo "$date $ip $rc $rtt" >> $LOG/tonto.log
-	logger "$date $ip $rc_str $rtt"
+	echo "$date $ip $rc $rtt $loss%" >> $LOG/tonto.log
+	logger "$date $ip $rc_str $rtt $loss%"
 
 done
 if [ $graph == 1 ]; then
